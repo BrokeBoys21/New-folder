@@ -1,8 +1,9 @@
 <?php
+// app/Http/Controllers/API/DepositController.php
 
+namespace App\Http\Controllers\API;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Deposit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,10 @@ class DepositController extends Controller
         $this->middleware('auth:api');
     }
 
+    /**
+     * Display a listing of the deposits.
+     * Users can only see deposits from their company.
+     */
     public function index()
     {
         $user = Auth::user();
@@ -26,6 +31,10 @@ class DepositController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created deposit.
+     * Automatically assigns the user's company_id.
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -50,6 +59,10 @@ class DepositController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified deposit.
+     * Users can only see deposits from their company.
+     */
     public function show($id)
     {
         $user = Auth::user();
@@ -60,7 +73,7 @@ class DepositController extends Controller
         if (!$deposit) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Deposit not found',
+                'message' => 'Deposit not found or unauthorized access',
             ], 404);
         }
 
@@ -70,6 +83,10 @@ class DepositController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified deposit.
+     * Users can only update deposits from their company.
+     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -88,7 +105,7 @@ class DepositController extends Controller
         if (!$deposit) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Deposit not found',
+                'message' => 'Deposit not found or unauthorized access',
             ], 404);
         }
 
@@ -102,6 +119,10 @@ class DepositController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified deposit.
+     * Users can only delete deposits from their company.
+     */
     public function destroy($id)
     {
         $user = Auth::user();
@@ -112,7 +133,7 @@ class DepositController extends Controller
         if (!$deposit) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Deposit not found',
+                'message' => 'Deposit not found or unauthorized access',
             ], 404);
         }
 

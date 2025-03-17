@@ -1,11 +1,11 @@
 <?php
 // routes/api.php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\DepositController;
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\CompanyController;
+use App\Http\Controllers\API\DepositController;
+use App\Http\Controllers\API\ItemController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -26,8 +26,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('company/users', [CompanyController::class, 'getCompanyUsers']);
     Route::get('company/statistics', [CompanyController::class, 'getCompanyStatistics']);
 
-    // Deposits
+    // Deposits - users can only manage deposits for their own company
     Route::apiResource('deposits', DepositController::class);
-
-   
+    
+    // Categories
+    Route::apiResource('categories', CategoryController::class);
+    Route::get('categories/{category}/items', [CategoryController::class, 'items']);
+    
+    // Items
+    Route::apiResource('items', ItemController::class);
+    Route::get('items/search', [ItemController::class, 'search']);
 });

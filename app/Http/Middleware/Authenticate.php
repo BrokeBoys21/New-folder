@@ -109,7 +109,7 @@ class Authenticate extends Middleware
             return false;
         }
 
-        return DB::table('deposits')->where('id', $companyIdFromToken)->exists();
+        // Fixed: Check the companies table instead of deposits
+        return DB::table('companies')->where('id', $companyIdFromToken)->exists();
     }
 }
-
